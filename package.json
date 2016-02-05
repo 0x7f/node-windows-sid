@@ -1,7 +1,7 @@
 {
   "name": "windows-sid",
   "description": "Utils for handling Windows' Security Identifier (a.k.a SID).",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "main": "./lib",
   "homepage": "https://github.com/0x7f/node-windows-sid",
