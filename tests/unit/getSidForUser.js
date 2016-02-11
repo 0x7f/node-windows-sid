@@ -6,6 +6,10 @@ var wmic = require('ms-wmic');
 var SID = require('../../');
 
 describe('SID', function() {
+    if (!SID.IS_SUPPORTED_PLATFORM) {
+      return;
+    }
+
     describe('getSidForUser', function() {
 
         var currentUser;
