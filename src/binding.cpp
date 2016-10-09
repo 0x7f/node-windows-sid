@@ -34,6 +34,34 @@ namespace {
         LocalFree(messageBuffer);
         return message;
     }
+
+    std::string getSidTypeString(SID_NAME_USE snu) {
+        switch(snu) {
+            case SidTypeUser:
+                return "User";
+            case SidTypeGroup:
+                return "Group";
+            case SidTypeDomain:
+                return "Domain";
+            case SidTypeAlias:
+                return "Alias";
+            case SidTypeWellKnownGroup:
+                return "WellKnownGroup";
+            case SidTypeDeletedAccount:
+                return "DeletedAccount";
+            case SidTypeInvalid:
+                return "Invalid";
+            case SidTypeUnknown:
+                return "Unknown";
+            case SidTypeComputer:
+                return "Computer";
+            case SidTypeLabel:
+                return "Label";
+            default:
+                return "Unknown";
+        }
+    }
+
 #endif
 
     class GetSidForUser : public Nan::AsyncWorker {
@@ -64,7 +92,13 @@ namespace {
             }
 
             if (IsValidSid(pSid) == FALSE) {
-                std::string msg = "No SID found for user \"" + user + "\"";
+                std::string msg = "No SID found for user \"" + user + "\".";
+                SetErrorMessage(msg.c_str());
+                return;
+            }
+
+            if (snu != SidTypeUser) {
+                std::string msg = "The provided name must belong to a User, but the according SID is of type \"" + getSidTypeString(snu) + "\".";
                 SetErrorMessage(msg.c_str());
                 return;
             }
