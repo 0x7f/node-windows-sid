@@ -118,14 +118,14 @@ namespace {
         void HandleErrorCallback() {
             Nan::HandleScope scope;
             v8::Local <v8::Value> argv[] = { Nan::Error(ErrorMessage() )};
-            callback->Call(1, argv);
+            callback->Call(Nan::GetCurrentContext()->Global(), 1, argv, async_resource);
         }
 
         void HandleOKCallback() {
             Nan::HandleScope scope;
             v8::Local <v8::Value> returnValue = Nan::New<v8::String>((char *) sid.data(), sid.size()).ToLocalChecked();
             v8::Local <v8::Value> argv[] = { Nan::Null(), returnValue };
-            callback->Call(2, argv);
+            callback->Call(Nan::GetCurrentContext()->Global(), 2, argv, async_resource);
         }
 
     private:
@@ -134,7 +134,7 @@ namespace {
     };
 
     NAN_METHOD(getSidForUser) {
-        Nan::Utf8String user(info[0]->ToString());
+        Nan::Utf8String user(info[0]);
         Nan::Callback *callback = new Nan::Callback(info[1].As<v8::Function>());
         Nan::AsyncQueueWorker(new GetSidForUser(callback, *user));
     }
